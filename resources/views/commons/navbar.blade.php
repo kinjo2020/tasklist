@@ -9,17 +9,19 @@
 
         <div class="collapse navbar-collapse" id="nav-bar">
             <ul class="navbar-nav mr-auto"></ul>
-            <ul class="navbar-nav">
-                {{-- タスク作成ページへのリンク --}}
-                <li class="nav-item">{!! link_to_route('tasks.create', '新規タスクの作成', [], ['class' => 'nav-link']) !!}</li>
-            </ul>
-            
-            <ul class="navbar-nav">
-                {{-- ユーザ登録ページへのリンク --}}
-                <li>{!! link_to_route('signup.get', 'Signup', [], ['class' => 'nav-link']) !!}</li>
-                {{-- ログインページへのリンク --}}
-                <li class="nav-item"><a href="#" class="nav-link">Login</a></li>
-            </ul>
+            @if (Auth::check())
+                <ul class="navbar-nav">
+                    {{-- タスク作成ページへのリンク --}}
+                    <li class="nav-item">{!! link_to_route('tasks.create', '新規タスクの作成', [], ['class' => 'nav-link']) !!}</li>
+                </ul>
+            @else
+                <ul class="navbar-nav">
+                    {{-- ユーザ登録ページへのリンク --}}
+                    <li>{!! link_to_route('signup.get', 'Signup', [], ['class' => 'nav-link']) !!}</li>
+                    {{-- ログインページへのリンク --}}
+                    <li class="nav-item">{!! link_to_route('login', 'Login', [], ['class' => 'nav-link']) !!}</li>
+                </ul>
+            @endif
         </div>
     </nav>
 </header>
