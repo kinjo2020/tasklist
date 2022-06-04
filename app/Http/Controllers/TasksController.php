@@ -15,11 +15,25 @@ class Taskscontroller extends Controller
      */
     public function index()
     {
-        $tasks = Task::all();
+        $data = [];
         
-        return view('tasks.index', [
-            'tasks' => $tasks,
-        ]);
+        if (\Auth::check()){
+            //認証済みユーザを取得
+            $user = \Auth::user();
+            //ユーザのタスクを取得
+            $tasks = $user->tasks()->paginate(10);
+            
+            $data = [
+                'user' => $user,
+                'tasks' => $tasks
+            ];
+            
+            return view('tasks.index', $data);
+        }
+        
+        else {
+            return view('tasks.index');
+        }
     }
 
     /**
