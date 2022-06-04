@@ -64,11 +64,11 @@ class Taskscontroller extends Controller
             'status' => 'required|max:10',
         ]);
         
-        
-        $task = new Task;
-        $task->content = $request->content;
-        $task->status = $request->status;
-        $task->save();
+        //認証済みユーザのタスクを作成
+        $request->user()->tasks()->create([
+            'content' => $request->content,
+            'status' => $request->status
+        ]);
         
         return redirect('/');
     }
