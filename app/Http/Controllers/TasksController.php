@@ -137,7 +137,7 @@ class Taskscontroller extends Controller
         //指定のタスクidを取得
         $task = Task::findOrfail($id);
         
-        //取得したタスクを更新
+        //認証済みユーザのタスクである場合は更新
         if (\Auth::id() === $task->user_id) {
             $task->update([
                 $task->content = $request->content,
@@ -156,9 +156,13 @@ class Taskscontroller extends Controller
      */
     public function destroy($id)
     {
+        //指定のタスクidを取得
         $task = Task::findOrfail($id);
         
-        $task->delete();
+        //認証済みユーザのタスクである場合削除
+        if (\Auth::id() === $task->user_id) {
+            $task->delete();
+        }
         
         return redirect('/');
     }
