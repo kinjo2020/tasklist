@@ -138,11 +138,12 @@ class Taskscontroller extends Controller
         $task = Task::findOrfail($id);
         
         //取得したタスクを更新
-        $task->update([
-            $task->content = $request->content,
-            $task->status = $request->status,
-            // $task->user_id = $request->user_id,
-        ]);
+        if (\Auth::id() === $task->user_id) {
+            $task->update([
+                $task->content = $request->content,
+                $task->status = $request->status,
+            ]);
+        }
         
         return redirect('/');
     }
