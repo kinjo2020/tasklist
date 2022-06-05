@@ -81,9 +81,10 @@ class Taskscontroller extends Controller
      */
     public function show($id)
     {
-        //
+        //idの値でタスクを取得
         $task = Task::findOrfail($id);
         
+        //認証済みユーザ自身のタスク詳細を表示
         if (\Auth::id() === $task->user_id){
             
             return view('tasks.show', [
@@ -91,11 +92,10 @@ class Taskscontroller extends Controller
             ]);
         }
         
+        //それ以外はトップページはリダイレクト
         else {
             return redirect('/');
         }
-        
-        
     }
 
     /**
@@ -108,9 +108,15 @@ class Taskscontroller extends Controller
     {
         $task = Task::findOrfail($id);
         
-        return view('tasks.edit', [
+        if (\Auth::id() === $task->user_id){
+            return view('tasks.edit', [
             'task' => $task,
-        ]);
+            ]);
+        }
+        
+        else {
+            return redirect('/');
+        }
     }
 
     /**
@@ -128,12 +134,15 @@ class Taskscontroller extends Controller
             'status' => 'required|max:10',
         ]);
         
-        
+        //指定のタスクidを取得
         $task = Task::findOrfail($id);
         
-        $task->content = $request->content;
-        $task->status = $request->status;
-        $task->save();
+        //取得したタスクを更新
+        $task->update([
+            $task->content = $request->content,
+            $task->status = $request->status,
+            // $task->user_id = $request->user_id,
+        ]);
         
         return redirect('/');
     }
